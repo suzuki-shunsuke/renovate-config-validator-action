@@ -1,0 +1,57 @@
+name: renovate-config-validator
+description: renovate-config-validator
+author: Shunsuke Suzuki
+inputs:
+  ref:
+    description: "checkout ref"
+    required: false
+  validator_version:
+    description: "version of renovate-config-validator. By default, the latest version is used."
+    required: false
+  config_file_path:
+    description: |
+      Renovate Configuration file
+      By default, the following files are validated.
+
+      - .github/renovate.json
+      - .github/renovate.json5
+      - .gitlab/renovate.json
+      - .gitlab/renovate.json5
+      - .renovaterc.json
+      - renovate.json
+      - renovate.json5
+      - .renovaterc
+    required: false
+  node-version:
+    required: false
+    description: Node version
+  strict:
+    required: false
+    default: "true"
+    description: renovate-config-validator strict mode
+runs:
+  using: composite
+  steps:
+    - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      if: inputs.config_file_path == ''
+      with:
+        ref: ${{inputs.ref}}
+        persist-credentials: false
+        sparse-checkout: |
+          .github
+    - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      if: inputs.config_file_path != ''
+      with:
+        ref: ${{inputs.ref}}
+        persist-credentials: false
+        sparse-checkout: ${{inputs.config_file_path}}
+        sparse-checkout-cone-mode: false
+    - uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4.2.0
+      if: inputs.node-version != ''
+      with:
+        node-version: ${{inputs.node-version}}
+    - uses: suzuki-shunsuke/github-action-renovate-config-validator@c22827f47f4f4a5364bdba19e1fe36907ef1318e # v1.1.1
+      with:
+        validator_version: ${{inputs.validator_version}}
+        config_file_path: ${{inputs.config_file_path}}
+        strict: ${{inputs.strict}}
