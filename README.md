@@ -8,7 +8,7 @@
 
 ```sh
 mkdir -p .github/workflows
-curl -Lq -o .github/workflows/renovate-config-validator.yaml https://raw.githubusercontent.com/suzuki-shunsuke/renovate-config-validator-action/refs/heads/main/.github/workflows/renovate-config-vdalidator.yaml
+curl -Lq -o .github/workflows/renovate-config-validator.yaml https://raw.githubusercontent.com/suzuki-shunsuke/renovate-config-validator-action/refs/heads/main/.github/workflows/renovate-config-validator.yaml
 ```
 
 ```yaml
